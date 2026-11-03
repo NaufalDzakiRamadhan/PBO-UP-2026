@@ -1,26 +1,60 @@
-"""Pengujian untuk kelas Petugas."""
+"""Pengujian untuk class Petugas."""
 
-from src.model.petugas import Petugas
+import pytest
+
+from src.model.petugas import Petugas, IdentitasPetugas
 
 
 def test_identitas_petugas() -> None:
-    petugas = Petugas("PT-001", "Andi", "Operator")
-    assert petugas.identitas() == "Andi (PT-001) — Operator"
+    petugas = Petugas("P001", "Budi", "Kasir")
+    assert petugas.identitas() == "Budi (P001) — Kasir"
 
 
-def test_kontak_dengan_telepon() -> None:
-    petugas = Petugas("PT-002", "Budi", "Admin", "08123456789")
-    assert petugas.kontak() == "Budi dapat dihubungi di 08123456789"
+def test_kontak_petugas() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir", "081234567890")
+    assert petugas.kontak() == "Budi dapat dihubungi di 081234567890"
 
 
-def test_kontak_tanpa_telepon() -> None:
-    petugas = Petugas("PT-003", "Siti", "Kasir")
-    assert petugas.kontak() == "Siti belum mencantumkan nomor telepon"
+def test_kontak_tanpa_nomor() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir")
+    assert petugas.kontak() == "Budi belum mencantumkan nomor telepon"
 
 
-def test_dua_petugas_memiliki_data_sendiri() -> None:
-    andi = Petugas("PT-001", "Andi", "Operator")
-    budi = Petugas("PT-002", "Budi", "Admin")
+def test_dua_petugas_berbeda() -> None:
+    budi = Petugas("P001", "Budi", "Kasir")
+    siti = Petugas("P002", "Siti", "Admin")
+    assert budi.identitas() != siti.identitas()
 
-    assert andi.identitas() != budi.identitas()
-    assert andi.kontak() != budi.kontak()
+
+def test_nip_readonly() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir")
+    with pytest.raises(AttributeError):
+        setattr(petugas, "nip", "P002")
+
+
+def test_nama_readonly() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir")
+    with pytest.raises(AttributeError):
+        setattr(petugas, "nama", "Siti")
+
+
+def test_nomor_telepon_valid() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir", "0812-3456-7890")
+    assert petugas.nomor_telepon == "081234567890"
+
+
+def test_nomor_telepon_invalid() -> None:
+    with pytest.raises(ValueError):
+        Petugas("P001", "Budi", "Kasir", "12345")
+
+
+def test_nomor_telepon_bisa_diubah() -> None:
+    petugas = Petugas("P001", "Budi", "Kasir")
+    petugas.nomor_telepon = "081234567890"
+    assert petugas.nomor_telepon == "081234567890"
+
+
+def test_identitas_petugas_frozen() -> None:
+    identitas = IdentitasPetugas("P001", "Budi", "Kasir")
+    with pytest.raises(AttributeError):
+        setattr(identitas, "nama", "Siti")

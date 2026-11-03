@@ -2,6 +2,7 @@
 
 from src.mahasiswa import Mahasiswa
 from src.model.alat_tani import AlatTani
+from src.model.alamat import Alamat
 from src.model.penyewa import Penyewa
 
 
@@ -18,13 +19,14 @@ def main() -> None:
     budi = Penyewa(
         "1406012509900001",
         "Budi Santoso",
-        "Kuok",
+        Alamat("Melati", "Kuok", "Bangkinang"),
         "0812-3456-7890",
     )
+
     siti = Penyewa(
         "1406014403950002",
         "Siti Aminah",
-        "Salo",
+        Alamat("Mawar", "Salo", "Bangkinang"),
     )
 
     # P02: Data alat pertanian
@@ -33,6 +35,7 @@ def main() -> None:
         "Traktor Roda Dua Kubota",
         150000,
     )
+
     pompa = AlatTani(
         "PA-01",
         "Pompa Air 3 Inci",
