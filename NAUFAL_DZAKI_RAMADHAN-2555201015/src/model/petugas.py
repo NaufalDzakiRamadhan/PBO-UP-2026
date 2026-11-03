@@ -35,21 +35,22 @@ class Petugas:
         self._nomor_telepon = "-"
         self.nomor_telepon = nomor_telepon
 
-    # Readonly: identitas petugas tidak boleh diganti sembarangan.
+    # Readonly: NIP tidak boleh diubah setelah objek dibuat.
     @property
     def nip(self) -> str:
         return self._identitas.nip
 
+    # Readonly: nama petugas hanya dapat dibaca.
     @property
     def nama(self) -> str:
         return self._identitas.nama
 
+    # Readonly: jabatan petugas hanya dapat dibaca.
     @property
     def jabatan(self) -> str:
         return self._identitas.jabatan
 
-    # Validating setter: nomor telepon dapat diperbarui,
-    # tetapi nilainya harus memenuhi aturan.
+    # Validating setter: nomor telepon dapat diubah dengan validasi.
     @property
     def nomor_telepon(self) -> str:
         return self._nomor_telepon
@@ -71,14 +72,13 @@ class Petugas:
 
     def identitas(self) -> str:
         """Mengembalikan identitas petugas."""
-        return (
-            f"{self.nama} ({self.nip}) — {self.jabatan}"
-        )
+        return f"{self.nama} ({self.nip}) — {self.jabatan}"
 
     def kontak(self) -> str:
         """Mengembalikan informasi kontak petugas."""
         if self._nomor_telepon == "-":
             return f"{self.nama} belum mencantumkan nomor telepon"
+
         return (
             f"{self.nama} dapat dihubungi di "
             f"{self.nomor_telepon}"
